@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "Begin executing start script";
+
+# Configure PHP date.timezone
+echo "upstream php-upstream { server ${PHP_UPSTREAM}:9000; }" > /etc/nginx/conf.d/upstream.conf
+
+echo "End executing start script";
+
+exec "nginx"
+
