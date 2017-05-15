@@ -1,21 +1,21 @@
-FROM debian:jessie
+FROM nginx:alpine
 
 MAINTAINER Vitalii Sydorenko <vetal.sydo@gmail.com>
 
-RUN apt-get update && apt-get install -y \
-    nginx
-
 ADD nginx.conf /etc/nginx/
-ADD default.conf /etc/nginx/sites-available/
 
-RUN rm /etc/nginx/sites-enabled/default
-RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default
+ARG PHP_UPSTREAM=php-fpm
 
-RUN echo "upstream php-upstream { server php:9000; }" > /etc/nginx/conf.d/upstream.conf
+# fix a problem--#397, change application source from dl-cdn.alpinelinux.org to aliyun source.
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories
 
-RUN usermod -u 1000 www-data
+RUN apk update \
+    && apk upgrade \
+    && apk add --no-cache bash \
+    && adduser -D -H -u 1000 -s /bin/bash www-data \
+    && rm /etc/nginx/conf.d/default.conf \
+    && echo "upstream php-upstream { server ${PHP_UPSTREAM}:9000; }" > /etc/nginx/conf.d/upstream.conf
 
 CMD ["nginx"]
 
-EXPOSE 80
-EXPOSE 443
+EXPOSE 80 443
