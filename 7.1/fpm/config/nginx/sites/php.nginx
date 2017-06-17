@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/php;
+    index index.php index.html;
+
+    server_name php php.loc info info.loc phpinfo phpinfo.loc;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+	location ~ \.php$ {
+    	include snippets/fastcgi-php.conf;
+    	fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+    }
+
+    error_log /var/log/nginx/php_error.log;
+    access_log /var/log/nginx/php_access.log;
+}
