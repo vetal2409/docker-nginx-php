@@ -86,6 +86,10 @@ RUN touch /etc/cron.d/default \
     && mkdir -p /var/log/cron/ && touch /var/log/cron/default.log
 
 COPY scripts /var/scripts
+
+RUN mv /var/scripts/xdebug.sh /usr/local/bin/xdebug
+RUN chmod +x /usr/local/bin/xdebug
+
 RUN mv /var/scripts/start.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start.sh
 CMD ["start.sh"]
