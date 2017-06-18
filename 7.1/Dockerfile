@@ -83,7 +83,7 @@ EXPOSE 80
 # Add crontab default file, Give execution rights on the cron job, Create the log file to be able to run tail
 RUN touch /etc/cron.d/default \
     && chmod 0644 /etc/cron.d/default \
-    && touch /var/log/cron.log
+    && mkdir -p /var/log/cron/ && touch /var/log/cron/default.log
 
 COPY scripts /var/scripts
 RUN mv /var/scripts/start.sh /usr/local/bin/
