@@ -2,6 +2,19 @@
 
 echo "Begin executing start script";
 
+if [ -d "/var/scripts/before" ]; then
+    echo "Run 'before' scripts";
+    # make scripts executable in case they aren't
+    chmod -Rf 750 /var/scripts/before/*
+    # run scripts in number order
+    for i in `ls /var/scripts/before/`;do
+        echo "$i";
+        /var/scripts/before/$i ;
+    done
+else
+    echo "Can't find 'before' script directory"
+fi
+
 
 if [ -n "$PHP_CLI_MEMORY_LIMIT" ]; then
     echo "Set cli memory limit: $PHP_CLI_MEMORY_LIMIT";
@@ -30,13 +43,17 @@ crontab /etc/cron.d/default
 cron
 
 
-if [ -d "/var/scripts/" ]; then
-    # make scripts executable incase they aren't
-    chmod -Rf 750 /var/scripts/*
+if [ -d "/var/scripts/after" ]; then
+    echo "Run 'after' scripts";
+    # make scripts executable in case they aren't
+    chmod -Rf 750 /var/scripts/after/*
     # run scripts in number order
-    for i in `ls /var/scripts/`; do /var/scripts/$i ; done
+    for i in `ls /var/scripts/after/`;do
+        echo "$i";
+        /var/scripts/after/$i ;
+    done
 else
-    echo "Can't find script directory"
+    echo "Can't find 'after' script directory"
 fi
 
 
