@@ -38,6 +38,41 @@ if [ "$PHP_XDEBUG_REMOTE_AUTOSTART" = "1" ]; then
     echo "xDebug remote auto-start enabled changes. remote_host=$HOST_IP  and remote_autostart=1";
 fi;
 
+
+#if [ ! -z "$PUID" ]; then
+#    if [ -z "$PGID" ]; then
+#        PGID=${PUID}
+#    fi
+#    deluser nginx
+#    addgroup -g ${PGID} nginx
+#    adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx -u ${PUID} nginx
+#else
+#    # Always chown webroot for better mounting
+#    chown -Rf nginx.nginx /opt/app
+#fi
+
+if [ ! -z "$PUID" ]; then
+    if [ -z "$PGID" ]; then
+        PGID=${PUID}
+    fi
+    deluser --remove-home nginx
+    addgroup --system --gid ${PUID} nginx
+    adduser --system --home /var/cache/nginx --shell /sbin/nologin --disabled-password --uid ${PUID} --ingroup nginx nginx
+else
+    # Always chown webroot for better mounting
+    chown -Rf nginx.nginx /opt/app
+fi
+
+if [ ! -z "$ACL_DIRS" ]; then
+    mkdir -p $ACL_DIRS
+    WEB_SERVER_USER=nginx
+    echo "Web server user: ${WEB_SERVER_USER}"
+    setfacl -dR -m u:"$WEB_SERVER_USER":rwX -m u:$(whoami):rwX $ACL_DIRS
+    echo "setfacl -dR -m u:\"$WEB_SERVER_USER\":rwX -m u:$(whoami):rwX $ACL_DIRS"
+    setfacl -R -m u:"$WEB_SERVER_USER":rwX -m u:$(whoami):rwX $ACL_DIRS
+    echo "setfacl -R -m u:\"$WEB_SERVER_USER\":rwX -m u:$(whoami):rwX $ACL_DIRS"
+fi
+
 # Run cron
 crontab /etc/cron.d/default
 cron

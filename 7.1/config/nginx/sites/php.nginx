@@ -2,7 +2,7 @@ server {
     listen 80;
     listen [::]:80;
 
-    root /var/www/php;
+    root /opt/app;
     index index.php index.html;
 
     server_name php php.loc info info.loc phpinfo phpinfo.loc;

@@ -39,7 +39,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --in
 # clear apt cache and remove unnecessary packages
 RUN apt-get autoclean && apt-get -y autoremove
 
-
+RUN addgroup --system nginx && \
+    adduser --system --home /var/cache/nginx --shell /sbin/nologin --disabled-password --ingroup nginx nginx
 ## NGINX configuration
 # redo directory structure
 RUN mkdir -p /etc/nginx/sites \
@@ -50,7 +51,7 @@ RUN cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
 # copy new configurations
 COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
 # create php virtual host
-RUN mkdir -p /var/www/php && echo "<?php phpinfo();" >> /var/www/php/index.php
+RUN mkdir -p /opt/app && echo "<?php phpinfo();" >> /opt/app/index.php
 COPY config/nginx/sites/php.nginx /etc/nginx/sites/php.nginx
 
 
@@ -76,7 +77,7 @@ RUN echo "export PHP_IDE_CONFIG=\"serverName=server\"" >> ~/.bashrc
 # copy config file for Supervisor
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-WORKDIR /var/www
+WORKDIR /opt/app
 
 # NGINX ports
 EXPOSE 80
