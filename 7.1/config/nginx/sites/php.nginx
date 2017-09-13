@@ -13,7 +13,7 @@ server {
 
 	location ~ \.php$ {
     	include snippets/fastcgi-php.conf;
-    	fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+    	fastcgi_pass unix:/run/php/php-fpm.sock;
     }
 
     error_log /var/log/nginx/php_error.log;
