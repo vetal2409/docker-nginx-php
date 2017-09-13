@@ -38,19 +38,6 @@ if [ "$PHP_XDEBUG_REMOTE_AUTOSTART" = "1" ]; then
     echo "xDebug remote auto-start enabled changes. remote_host=$HOST_IP  and remote_autostart=1";
 fi;
 
-
-#if [ ! -z "$PUID" ]; then
-#    if [ -z "$PGID" ]; then
-#        PGID=${PUID}
-#    fi
-#    deluser nginx
-#    addgroup -g ${PGID} nginx
-#    adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx -u ${PUID} nginx
-#else
-#    # Always chown webroot for better mounting
-#    chown -Rf nginx.nginx /opt/app
-#fi
-
 if [ ! -z "$PUID" ]; then
     if [ -z "$PGID" ]; then
         PGID=${PUID}
@@ -58,9 +45,6 @@ if [ ! -z "$PUID" ]; then
     deluser --remove-home nginx
     addgroup --system --gid ${PUID} nginx
     adduser --system --home /var/cache/nginx --shell /sbin/nologin --disabled-password --uid ${PUID} --ingroup nginx nginx
-else
-    # Always chown webroot for better mounting
-    chown -Rf nginx.nginx /opt/app
 fi
 
 if [ ! -z "$ACL_DIRS" ]; then
