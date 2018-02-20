@@ -66,6 +66,7 @@ if [ -d "/var/scripts/after" ]; then
     echo "Run 'after' scripts";
     # make scripts executable in case they aren't
     chmod -Rf 750 /var/scripts/after/*
+    sleep 1;
     # run scripts in number order
     for i in `ls /var/scripts/after/`;do
         echo "$i";
