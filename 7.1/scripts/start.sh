@@ -4,12 +4,12 @@ echo "Begin executing start script";
 
 if [ -d "/var/scripts/before" ]; then
     echo "Run 'before' scripts";
-    # make scripts executable in case they aren't
-    chmod -Rf 750 /var/scripts/before/*
+    # suppose that scripts will be executable
+
     # run scripts in number order
     for i in `ls /var/scripts/before/`;do
-        echo "$i";
-        /var/scripts/before/$i ;
+        echo ${i};
+        sh /var/scripts/before/${i} ;
     done
 else
     echo "Can't find 'before' script directory"
@@ -64,13 +64,12 @@ cron
 
 if [ -d "/var/scripts/after" ]; then
     echo "Run 'after' scripts";
-    # make scripts executable in case they aren't
-    chmod -Rf 750 /var/scripts/after/*
-    sleep 1;
+    # suppose that scripts will be executable
+
     # run scripts in number order
     for i in `ls /var/scripts/after/`;do
-        echo "$i";
-        /var/scripts/after/$i ;
+        echo ${i};
+        sh /var/scripts/after/${i} ;
     done
 else
     echo "Can't find 'after' script directory"
