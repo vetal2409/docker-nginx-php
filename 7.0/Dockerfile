@@ -89,6 +89,8 @@ RUN touch /etc/cron.d/default \
 
 COPY scripts /var/scripts
 
+RUN mv /var/scripts/wait-for-it.sh /usr/bin/waitforit
+
 RUN mv /var/scripts/xdebug.sh /usr/local/bin/xdebug
 RUN chmod +x /usr/local/bin/xdebug
 
