@@ -57,11 +57,6 @@ if [ ! -z "$ACL_DIRS" ]; then
     echo "setfacl -R -m u:\"$WEB_SERVER_USER\":rwX -m u:$(whoami):rwX $ACL_DIRS"
 fi
 
-# Run cron
-crontab /etc/cron.d/default
-cron
-
-
 if [ -d "/var/scripts/after" ]; then
     echo "Run 'after' scripts";
     # suppose that scripts will be executable
