@@ -46,6 +46,11 @@ RUN addgroup --system nginx && \
 RUN mkdir -p /etc/nginx/sites \
     && mv /etc/nginx/sites-available/default /etc/nginx/sites/default.nginx \
     && rm -r /etc/nginx/sites-available /etc/nginx/sites-enabled
+
+# Forward nginx request and errors logs to stdout|stderr
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log
+
 # bakup configurations
 RUN cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
 # copy new configurations
@@ -81,11 +86,6 @@ WORKDIR /opt/app
 
 # NGINX ports
 EXPOSE 80
-
-# Add crontab default file, Give execution rights on the cron job, Create the log file to be able to run tail
-RUN touch /etc/cron.d/default \
-    && chmod 0644 /etc/cron.d/default \
-    && mkdir -p /var/log/cron/ && touch /var/log/cron/default.log
 
 COPY scripts /var/scripts
 
