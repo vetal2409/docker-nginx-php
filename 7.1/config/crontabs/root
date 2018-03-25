@@ -1,0 +1,2 @@
+# min   hour    day     month   weekday command
+# */1    *       *       *       *        echo "Cron..." >> /proc/1/fd/1

@@ -49,7 +49,11 @@ RUN mkdir -p /etc/nginx/sites \
 
 # Forward nginx request and errors logs to stdout|stderr
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
-	&& ln -sf /dev/stderr /var/log/nginx/error.log
+	&& ln -sf /dev/stderr /var/log/nginx/error.log \
+    && chown -R nginx:nginx /var/log/nginx
+
+# Copy crontabs
+COPY config/crontabs /var/spool/cron/crontabs
 
 # bakup configurations
 RUN cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak

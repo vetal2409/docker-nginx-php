@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Set the correct permissions for crontabs
+chmod -R 600 /var/spool/cron/crontabs
+
 echo "Begin executing start script";
 
 if [ -d "/var/scripts/before" ]; then
