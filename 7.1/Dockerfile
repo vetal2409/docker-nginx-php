@@ -52,9 +52,8 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log \
     && chown -R nginx:nginx /var/log/nginx
 
-# Cron + Access to crontabs
+# Copy crontabs
 COPY config/crontabs /var/spool/cron/crontabs
-RUN chmod -R 600 /var/spool/cron/crontabs
 
 # bakup configurations
 RUN cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
